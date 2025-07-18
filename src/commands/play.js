@@ -1,5 +1,7 @@
+const { SlashCommandBuilder } = require('@discordjs/builders');
+
 module.exports = {
-  data: new require('@discordjs/builders').SlashCommandBuilder()
+  data: new SlashCommandBuilder()
     .setName('play')
     .setDescription('Toca uma música pelo link ou nome')
     .addStringOption(option =>
@@ -12,9 +14,14 @@ module.exports = {
     const query = interaction.options.getString('query');
     const voiceChannel = interaction.member.voice.channel;
 
-    if (!voiceChannel) return interaction.reply({ content: 'Você precisa estar em um canal de voz!', ephemeral: true });
+    if (!voiceChannel) {
+      return interaction.reply({ content: 'Você precisa estar em um canal de voz!', ephemeral: true });
+    }
 
-    // Pega o player, se não existir cria
+    if (!interaction.guild || !interaction.channel) {
+      return interaction.reply({ content: 'Erro ao obter informações do servidor ou canal.', ephemeral: true });
+    }
+
     let player = aqualink.players.get(interaction.guild.id);
     if (!player) {
       player = aqualink.players.create({
@@ -28,14 +35,18 @@ module.exports = {
     if (!player.connected) await player.connect();
 
     const results = await aqualink.rest.loadTracks(query);
-    if (!results || !results.tracks.length) return interaction.reply({ content: 'Nenhuma música encontrada.', ephemeral: true });
 
-    player.queue.add(results.tracks[0]);
+    if (!results || !results.tracks.length) {
+      return interaction.reply({ content: 'Nenhuma música encontrada.', ephemeral: true });
+    }
+
+    const track = results.tracks[0];
+    player.queue.add(track);
 
     if (!player.playing && !player.paused) {
       await player.play();
     }
 
-    await interaction.reply(`🎶 Tocando agora: **${results.tracks[0].info.title}**`);
+    await interaction.reply(`🎶 Tocando agora: **${track.info.title}**`);
   },
 };
