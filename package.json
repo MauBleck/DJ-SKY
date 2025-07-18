@@ -1,0 +1,22 @@
+{
+  "name": "bot",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "commonjs",
+  "scripts": {
+  "test": "echo \"Error: no test specified\" && exit 1",
+  "deploy": "node ./deploy-commands.js"
+}
+,
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@slipher/cooldown": "^0.0.5",
+    "aqualink": "^2.7.2",
+    "discord.js": "^14.21.0",
+    "dotenv": "^17.2.0",
+    "fast-glob": "^3.3.3"
+  }
+}
