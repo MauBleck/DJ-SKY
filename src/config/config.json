@@ -1,0 +1,12 @@
+{
+  "TOKEN": "MTMwMTcxOTI0MDQxNTUxNDY0NA.GV_8JF.PVN1Bov6aJQNhdwGop1rl2Im_d6VUALR14lTmM",
+  "NODES": [
+    {
+      "name":     "main_node",
+      "host":     "127.0.0.1",
+      "port":     1038,
+      "password": "yothisnodeishostedbymushroom0162",
+      "secure":   false
+    }
+  ]
+}
