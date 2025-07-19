@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const { Client, GatewayIntentBits, Collection } = require('discord.js');
 const { Poru } = require('poru');
 const config = require('./config/config.json');
@@ -13,23 +15,20 @@ const client = new Client({
 
 client.slash = new Collection();
 
-// 1) Inicializa o Poru ANTES de carregar qualquer handler
+// Inicializa Poru
 client.poru = new Poru(client, config.NODES, {
   library: 'discord.js',
   defaultPlatform: 'ytsearch',
 });
 
-
-// 3) Quando o bot estiver pronto:
 client.once('ready', async () => {
   await client.poru.init(client);
   console.log(`🤖 Logado como ${client.user.tag}`);
 
-  // Agora que o Poru foi inicializado, carregue os handlers que dependem dele
-  require('./handlers/event')(client);      // interactionCreate
-  require('./handlers/poruEvents')(client); // eventos do Poru
-  await require('./handlers/slash')(client); // registro de slash commands
+  require('./handlers/event')(client);
+  require('./handlers/poruEvents')(client);
+  await require('./handlers/slash')(client);
 });
 
-// 4) Login
-client.login(config.TOKEN);
+// Use o token do env aqui
+client.login(process.env.DISCORD_TOKEN);
