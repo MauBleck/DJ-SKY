@@ -9,24 +9,13 @@ module.exports = (client) => {
       await cmd.run(client, interaction);
     } catch (error) {
       console.error(error);
-      interaction.reply({ content: '❌ Ocorreu um erro ao executar o comando!', ephemeral: true });
+      interaction.reply({ content: '❌ Ocorreu um erro ao executar o comando!', flags: 64 });
     }
   });
 
-  // Eventos do Poru
-  client.poru.on('nodeConnect', node => {
-    console.log(`✅ Node conectado: ${node.name}`);
-  });
 
   client.poru.on('nodeError', (node, error) => {
     console.error(`❌ Erro no node ${node.name}:`, error);
-  });
-
-  client.poru.on('trackStart', (player, track) => {
-    const channel = client.channels.cache.get(player.textChannel);
-    if (channel) {
-      channel.send(`🎵 Tocando agora: **${track.info.title}**`);
-    }
   });
 
   client.poru.on('queueEnd', (player) => {
