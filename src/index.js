@@ -21,6 +21,19 @@ client.poru = new Poru(client, config.NODES, {
   defaultPlatform: 'ytsearch',
 });
 
+// Eventos do node devem estar fora do client.once('ready')
+client.poru.on('nodeConnect', (node) => {
+  console.log(`✅ Node conectado: ${node.name}`);
+});
+
+client.poru.on('nodeError', (node, error) => {
+  console.error(`❌ Erro ao conectar ao node ${node.name}:`, error);
+});
+
+client.poru.on('nodeClose', (node, code, reason) => {
+  console.warn(`⚠️ Node ${node.name} foi desconectado. Código: ${code}, Motivo: ${reason}`);
+});
+
 client.once('ready', async () => {
   await client.poru.init(client);
   console.log(`🤖 Logado como ${client.user.tag}`);
@@ -30,5 +43,4 @@ client.once('ready', async () => {
   await require('./handlers/slash')(client);
 });
 
-// Use o token do env aqui
 client.login(process.env.DISCORD_TOKEN);
